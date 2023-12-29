@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: >-
+  Cloudformation template to create a highly available SSH bastion host
+
+Parameters:
+    EnvironmentName:
+        Description: This name will be prefixed to all the resources.
+        Type: String
+    LatestAMI:
+      Description: Static reference to latest Amazon Linux 2 AMI
+      Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+      Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+      AllowedValues:
+        - '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+    KeyPair:
+      Description: Which Key Pair would you like to use for remote access?
+      Type: 'AWS::EC2::KeyPair::KeyName'
+      Default: mykeypair
+    InstanceType:
+      Description: Instance size for the Bastion Host (default - t3.micro)
+      Type: String 
+      AllowedValues:
+        - t2.micro
+      Default: t2.micro
+
+    SshPort:
+      Description: What port number would you like to use to connect to your Bastion Host over SSH?
+      Type: Number
+      Default: 22
+      MinValue: 22
+      MaxValue: 65535
+
+Resources:
+
+  BastionASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: !Join ["", [!Ref "AWS::StackName", "BastionHostASG"]]
+      LaunchConfigurationName: !Ref BastionLaunchConfig
+      VPCZoneIdentifier:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
+        - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
+      MinSize: "1"
+      DesiredCapacity: "1"
+      MaxSize: "1"
+      Tags:
+        -
+          Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "BastionHost"]]
+          PropagateAtLaunch: true
+
+  BastionLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      LaunchConfigurationName: !Join ["", [!Ref "AWS::StackName", "BastionHostLaunchConfiguration"]]
+      AssociatePublicIpAddress: true
+      ImageId: !Ref LatestAMI
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyPair
+      SecurityGroups:
+        - !Ref SecurityGroup
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Bastion Host Security Group
+      VpcId: 
+         Fn::ImportValue:
+            Fn::Sub: "${EnvironmentName}-VPCID"
+      GroupName: !Join ["", [ !Ref "AWS::StackName", "BastionHostSecurityGroup"]]
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp:  0.0.0.0/0
+        - IpProtocol: icmp
+          FromPort: '-1'
+          ToPort: '-1'
+          CidrIp:  0.0.0.0/0
+      Tags:
+      - Key: Name
+        Value: !Sub '${AWS::StackName}-BastionSecurityGroup'  

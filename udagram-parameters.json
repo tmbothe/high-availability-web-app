@@ -1,0 +1,18 @@
+[
+    {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "ThimotheProject2"  
+	},
+    {
+    "ParameterKey": "AMItoUse",
+    "ParameterValue": "ami-0c7217cdde317cfec"
+    },
+	{
+		"ParameterKey": "BucketName",
+		"ParameterValue": "udagram"
+		}
+
+    
+]
+
+

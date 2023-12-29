@@ -1,0 +1,18 @@
+[
+    {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "ThimotheProject2"  
+	},
+    {
+    "ParameterKey": "KeyPair",
+    "ParameterValue": "mykeypair"
+    },
+    {
+        "ParameterKey": "KeyPair",
+        "ParameterValue": "mykeypair"
+    }       
+        
+    
+]
+
+
