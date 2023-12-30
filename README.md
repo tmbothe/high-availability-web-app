@@ -6,7 +6,7 @@ In this project we are going to design and build a cloudformation template that 
 
 ### Architecture
 
-![Architecture](https://github.com/mbothe/high-availability-web-app/diagrams.jpg)
+![Architecture](https://github.com/mbothe/high-availability-web-app/diagrams/diagrams_project2.png)
 ## Spin up instructions
 To spin up your infrastructures using this template, follow the instructions below:
 - Create an AWS account
