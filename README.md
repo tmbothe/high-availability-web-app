@@ -30,3 +30,7 @@ To tear down the infrastructures:
 
 ## Other considerations
 If you want to explore more about cloudformation , visit [here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)  
+
+## Web Server link
+
+The infrastructure are currently up and running. You can follow the link below to access the home url: http://server-webap-reccsbnce8uk-843036089.us-east-1.elb.amazonaws.com/
