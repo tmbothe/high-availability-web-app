@@ -5,7 +5,11 @@
 In this project we are going to design and build a cloudformation template that will allow to launch a high availability app in AWS.
 
 ### Architecture
-
+The architecture below describes the infrastructures we will be deploying:
+- There is a VPC , 2 public subnets and 2 private subnets
+- An internet Gateway to access the internet and two NAT gateway, one in each public subnet
+- There web servers and application servers launch in an auto scaling group with security groups
+- On bastion host where user can ssh into.
 ![Architecture](https://github.com/tmbothe/high-availability-web-app/blob/main/diagrams/diagrams_project2.png)
 ## Spin up instructions
 To spin up your infrastructures using this template, follow the instructions below:
